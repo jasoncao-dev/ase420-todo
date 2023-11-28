@@ -1,5 +1,5 @@
 # Design Patterns:
-
-1. **Command Pattern**: Use the Command pattern to encapsulate each command (record, query) into its own class with a common execution interface.
-2. **Strategy Pattern**: Implement the Strategy pattern to switch between different output formatting styles.
-3. **Factory Pattern**: Use the Factory pattern to create instances of commands or formatters based on input.
+Here are some design patterns that I have identified in the codebase on November 27, 2023. Here is the [source code](https://github.com/jasoncao-dev/ase420-todo/commit/9dc09f0dab0193f28d6a276b7015b94243cef59a) for reference.
+1. **Command Pattern**: Use the Command pattern to encapsulate each command (record, query) into its own class with a common execution interface. The source code using this pattern (`CommandInterface`, `RecordCommand`, `QueryCommand`) can be found under /src/.
+2. **Strategy Pattern**: Implement the Strategy pattern to switch between different output formatting styles. The source code using this pattern (`Formatter`) can be found under /src/.
+3. **Factory Pattern**: Use the Factory pattern to create instances of commands or formatters based on input. The source code using this pattern (`CommandFactory`) can be found under /src/.
