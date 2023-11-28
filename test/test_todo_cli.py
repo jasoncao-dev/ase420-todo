@@ -1,11 +1,11 @@
 import pytest
 from unittest.mock import Mock
-from program import TodoCLI
+from TodoCLI import TodoCLI
 
 
 @pytest.fixture
 def mock_input_handler(mocker):
-    input_handler = mocker.patch('program.InputHandler', autospec=True)
+    input_handler = mocker.patch('TodoCLI.InputHandler', autospec=True)
     input_handler_instance = input_handler.return_value
     input_handler_instance.parse_input.return_value = (Mock(), None)
     return input_handler_instance
@@ -13,7 +13,7 @@ def mock_input_handler(mocker):
 
 @pytest.fixture
 def mock_database(mocker):
-    return mocker.patch('program.Database', autospec=True).return_value
+    return mocker.patch('TodoCLI.Database', autospec=True).return_value
 
 
 @pytest.fixture
