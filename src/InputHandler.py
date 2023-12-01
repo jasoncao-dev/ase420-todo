@@ -14,8 +14,12 @@ class InputHandler:
             return self._parse_record_command(command)
         elif command.startswith('query'):
             return self._parse_query_command(command)
+        elif command.startswith('report'):
+            return self._parse_report_command(command)
+        elif command.startswith('priority'):
+            return self._parse_priority_command()
         else:
-            return None, "Invalid command. Use 'record' or 'query'."
+            return None, "Invalid command."
 
     def _parse_record_command(self, command):
         match = re.match(self.RECORD_PATTERN, command)
@@ -36,6 +40,20 @@ class InputHandler:
         tag = tag if tag else ''
 
         return {'command': 'record', 'date': date, 'from_time': from_time, 'to_time': to_time, 'task': task, 'tag': tag}, None
+
+    def _parse_report_command(self, command):
+        command_parts = command.split()
+        if len(command_parts) != 3:
+            return None, "Invalid report command format. Use 'report <FROM DATE> <TO DATE>'."
+
+        from_date, to_date = command_parts[1], command_parts[2]
+        if not re.match(self.DATE_PATTERN, from_date) or not re.match(self.DATE_PATTERN, to_date):
+            return None, "Invalid date format. Use YYYY/MM/DD."
+
+        return {'command': 'report', 'from_date': from_date, 'to_date': to_date}, None
+
+    def _parse_priority_command(self):
+        return {'command': 'priority'}, None
 
     def _validate_date(self, date_str):
         try:

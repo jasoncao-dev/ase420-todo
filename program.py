@@ -11,8 +11,6 @@ def main():
 
         if user_input.lower() == 'exit':
             break
-        elif user_input.lower() == 'help':
-            cli_app.display_help()
         else:
             response = cli_app.execute_command(user_input)
             print(response)

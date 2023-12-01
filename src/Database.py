@@ -46,5 +46,18 @@ class Database:
         cursor.execute(sql, params)
         return cursor.fetchall()
 
+    def generate_report(self, from_date, to_date):
+        query = 'SELECT * FROM tasks WHERE date BETWEEN ? AND ?;'
+        cursor = self.conn.cursor()
+        cursor.execute(query, (from_date, to_date))
+        return cursor.fetchall()
+
+    def get_priority_tasks(self):
+        query = """SELECT task, SUM(strftime('%s', end_time) - strftime('%s', start_time)) as total_time
+                   FROM tasks GROUP BY task ORDER BY total_time DESC;"""
+        cursor = self.conn.cursor()
+        cursor.execute(query)
+        return cursor.fetchall()
+
     def close(self):
         self.conn.close()

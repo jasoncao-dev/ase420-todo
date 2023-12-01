@@ -1,12 +1,15 @@
+from src.PriorityCommand import PriorityCommand
 from src.QueryCommand import QueryCommand
 from src.RecordCommand import RecordCommand
+from src.ReportCommand import ReportCommand
 
 
 class CommandFactory:
     def get_command(self, command_type):
-        if command_type == 'record':
-            return RecordCommand()
-        elif command_type == 'query':
-            return QueryCommand()
-        else:
-            return None
+        commands = {
+            'record': RecordCommand(),
+            'query': QueryCommand(),
+            'report': ReportCommand(),
+            'priority': PriorityCommand(),
+        }
+        return commands.get(command_type)

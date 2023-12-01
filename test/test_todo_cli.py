@@ -15,11 +15,9 @@ def mock_input_handler(mocker):
 def mock_database(mocker):
     return mocker.patch('TodoCLI.Database', autospec=True).return_value
 
-
 @pytest.fixture
 def todo_cli(mock_input_handler, mock_database):
     return TodoCLI()
-
 
 def test_record_command(todo_cli, mock_input_handler, mock_database):
     mock_input_handler.parse_input.return_value = (
@@ -62,7 +60,7 @@ def test_query_command_with_valid_tag(todo_cli, mock_input_handler, mock_databas
         None
     )
     mock_database.query_tasks.return_value = [
-        ('2023/04/01', '10:00', '11:00', 'Study Python', 'STUDY')
+        (1, '2023/04/01', '10:00', '11:00', 'Study Python', 'STUDY')
     ]
 
     result = todo_cli.execute_command("query :STUDY")
@@ -91,8 +89,8 @@ def test_query_command_no_results(todo_cli, mock_input_handler, mock_database):
 
 def test_query_command_with_date(todo_cli, mock_input_handler, mock_database):
     expected_tasks = [
-        ('2023/04/01', '10:00', '11:00', 'Study Python', 'STUDY'),
-        ('2023/04/01', '12:00', '13:00', 'Lunch Break', '')
+        (1, '2023/04/01', '10:00', '11:00', 'Study Python', 'STUDY'),
+        (2, '2023/04/01', '12:00', '13:00', 'Lunch Break', '')
     ]
     mock_input_handler.parse_input.return_value = (
         {
@@ -109,3 +107,43 @@ def test_query_command_with_date(todo_cli, mock_input_handler, mock_database):
     mock_database.query_tasks.assert_called_once_with(date='2023/04/01', task=None, tag=None)
     for task in expected_tasks:
         assert task[3] in result
+
+def test_report_command(todo_cli, mock_input_handler, mock_database):
+    mock_input_handler.parse_input.return_value = (
+        {
+            'command': 'report',
+            'from_date': '2023/01/01',
+            'to_date': '2023/01/31'
+        },
+        None
+    )
+    mock_database.generate_report.return_value = [
+        (1, '2023/01/01', '09:00', '10:00', 'New Year Planning', 'PLANNING'),
+        (2, '2023/01/15', '14:00', '15:00', 'Mid-month Review', 'REVIEW')
+    ]
+
+    result = todo_cli.execute_command("report 2023/01/01 2023/01/31")
+
+    mock_input_handler.parse_input.assert_called_once_with("report 2023/01/01 2023/01/31")
+    mock_database.generate_report.assert_called_once_with('2023/01/01', '2023/01/31')
+    assert "New Year Planning" in result
+    assert "Mid-month Review" in result
+
+def test_priority_command(todo_cli, mock_input_handler, mock_database):
+    mock_input_handler.parse_input.return_value = (
+        {
+            'command': 'priority'
+        },
+        None
+    )
+    mock_database.get_priority_tasks.return_value = [
+        ('Study Python', 18000),
+        ('Exercise', 7200),  # Let's say this represents 2 hours
+    ]
+
+    result = todo_cli.execute_command("priority")
+
+    mock_input_handler.parse_input.assert_called_once_with("priority")
+    mock_database.get_priority_tasks.assert_called_once()
+    assert "Study Python" in result
+    assert "Exercise" in result
