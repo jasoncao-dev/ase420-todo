@@ -1,6 +1,6 @@
 class Formatter:
     def format_query_results(self, results):
-        formatted_results = [f"{row[0]} {row[1]} {row[2]} {row[3]} {row[4]}" + (f" {row[5]}" if row[5] is not None else "") for row in
+        formatted_results = [f"{row[0]} {row[1]} {row[2]} {row[3]}" + (f" {row[4]}" if row[4] is not None else "") for row in
                  results]
         return "\n".join(formatted_results)
 

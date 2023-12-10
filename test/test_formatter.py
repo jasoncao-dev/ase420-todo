@@ -15,7 +15,7 @@ def test_format_query_results():
     query_data = [(1, '2023/04/01', '10:00', '11:00', 'Study Python', 'STUDY')]
 
     result = formatter.format_query_results(query_data)
-    expected_result = "1 2023/04/01 10:00 11:00 Study Python STUDY"
+    expected_result = "1 2023/04/01 10:00 11:00 Study Python"
     assert result == expected_result
 
 def test_format_priority():
